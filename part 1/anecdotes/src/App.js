@@ -1,5 +1,15 @@
 import { useState } from 'react'
 
+const HighVote = (props) => {
+  let maxNumber = (Math.max(...props.voted));
+  let indexPlace = props.voted.indexOf(maxNumber);
+  return (
+      <>
+        <p>{props.anecdotes[indexPlace]}</p>
+        <p>has {maxNumber} votes</p>
+      </>
+  )}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -13,24 +23,27 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const [voted, setVoted] = useState({0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0})
-  console.log(voted);
+  const [voted, setVoted] = useState([0, 0, 0, 0, 0, 0, 0, 0])
 
   const nextHandler = () => {
     return setSelected(Math.floor(Math.random() * (anecdotes.length)));
   }
 
   const voteHandler = () => {
-    setVoted({...voted, [selected]: + 1})
-  }
+    const newVote = [...voted];
+    newVote[selected] += 1;
+    setVoted(newVote);
+  }  
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {voted[selected]} votes</p>
       <button onClick={voteHandler}>vote</button>
-
       <button onClick={nextHandler}>next anecdote</button>
+      <h2>Anecdote with most votes</h2>
+      <HighVote anecdotes = {anecdotes} voted = {voted} />
     </div>
   )
 }

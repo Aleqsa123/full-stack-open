@@ -1,5 +1,8 @@
 const Total = (props) => {
-    return <p>total of {props.course.parts[0].exercises + props.course.parts[1].exercises + props.course.parts[2].exercises + + props.course.parts[3].exercises} exercises</p>
+  const totalArray = props.course.parts;
+  const total = totalArray.reduce((accumulator, currentValue) => accumulator + currentValue.exercises, 0,);
+
+    return <p> total of {total} exercises </p>
 }
 
 export default Total

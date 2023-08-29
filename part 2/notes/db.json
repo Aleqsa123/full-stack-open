@@ -19,6 +19,11 @@
       "content": "POST is used to create new note",
       "important": true,
       "id": 4
+    },
+    {
+      "content": "Add new note",
+      "important": false,
+      "id": 5
     }
   ]
 }

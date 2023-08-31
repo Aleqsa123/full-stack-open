@@ -31,6 +31,15 @@ const App = () => {
       setNewNumber('')
   }
 
+    //Deletes person (name and number) from the phonebook
+    const deletePerson = (event, id) => {
+      event.preventDefault()
+      const deletedPerson = persons.filter((person) => {return person.id !== id})
+      setPersons(deletedPerson)
+      service
+        .deletePerson(id)
+      }
+
   const [newName, setNewName] = useState('')
 
   // Takes new name's value from the form
@@ -71,11 +80,11 @@ const App = () => {
                   handleNameChange={handleNameChange} 
                   newNumber={newNumber} 
                   handleNumberChange={handleNumberChange} 
-                  addPerson={addPerson} />
+                  addPerson={addPerson} 
+                  />
 
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow} />
-
+      <Persons personsToShow={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }

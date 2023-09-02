@@ -20,8 +20,25 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     const newPersons = {name: newName, number: newNumber}
-    if (persons.some((element)=>element.name === newName)){
-      alert(`${newName} is already added to phonebook`)
+
+    //find if entered name equals to existed name - caseInsensitive
+    if (persons.some((element) => element.name.toLowerCase() === newName.toLowerCase() )){
+      //if new name exists, set window confirm
+      if (window.confirm( `${ newPersons.name } is already added to phonebook, replace the old number with a new one?`)){
+        //create new array for useState hook  
+        const alteredPersons = persons.map( (person) => {
+            if (newPersons.name.toLowerCase() === person.name.toLowerCase()) {
+              //update (return) existed name's name and number - caseInsensitive
+              return {...person, name: newPersons.name, number: newPersons.number}
+            } else { return person } 
+          })
+          setPersons(alteredPersons)
+          //find updated name's (Object's) id for PUT method
+          const id = persons.filter((person) => {return newPersons.name.toLowerCase() === person.name.toLowerCase()})[0].id;
+          service
+            .updatePerson(newPersons, id)
+    }
+    //Add new name if entered name not equals to existed name
     }else{service
       .create(newPersons)
       .then(returnedPerson => {

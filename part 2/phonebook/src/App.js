@@ -37,6 +37,15 @@ const App = () => {
           const id = persons.filter((person) => {return newPersons.name.toLowerCase() === person.name.toLowerCase()})[0].id;
           service
             .updatePerson(newPersons, id)
+            .catch(error => {
+              setMessage(
+                `Information of ${newPersons.name} has already been removed from server`
+              )
+              setTimeout(() => {
+                setMessage(null)
+              }, 5000)
+              setPersons(persons.filter(person => person.id !== id))
+            })
     }
     //Add new name if entered name not equals to existed name
     }else{service
@@ -47,15 +56,15 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       //Confirmation message after adding person to the phonebook
-      setConfirmMessage(
+      setMessage(
         `Added ${newPersons.name} `
       )
       setTimeout(() => {
-        setConfirmMessage(null)
+        setMessage(null)
       }, 3000)
   }
 
-  const [confirmMessage, setConfirmMessage] = useState(null)
+  const [message, setMessage] = useState(null)
 
     //Deletes person (name and number) from the phonebook
     const deletePerson = (event, id) => {
@@ -98,7 +107,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={confirmMessage} />
+      <Notification message={message} />
       <Filter value={newSearch} onChange={handleSearch}/>
 
 

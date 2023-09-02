@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
-import service from './services/persons'
+import Notification from './components/Notification';
+import service from './services/persons';
 
 
 const App = () => {
@@ -20,7 +21,6 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     const newPersons = {name: newName, number: newNumber}
-
     //find if entered name equals to existed name - caseInsensitive
     if (persons.some((element) => element.name.toLowerCase() === newName.toLowerCase() )){
       //if new name exists, set window confirm
@@ -46,7 +46,16 @@ const App = () => {
       })}
       setNewName('')
       setNewNumber('')
+      //Confirmation message after adding person to the phonebook
+      setConfirmMessage(
+        `Added ${newPersons.name} `
+      )
+      setTimeout(() => {
+        setConfirmMessage(null)
+      }, 3000)
   }
+
+  const [confirmMessage, setConfirmMessage] = useState(null)
 
     //Deletes person (name and number) from the phonebook
     const deletePerson = (event, id) => {
@@ -89,6 +98,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={confirmMessage} />
       <Filter value={newSearch} onChange={handleSearch}/>
 
 

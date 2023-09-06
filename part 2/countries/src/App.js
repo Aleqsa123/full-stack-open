@@ -1,93 +1,39 @@
 import { useState, useEffect } from 'react';
+import getCountries from './services/countries';
 
 const App = () => {
-  const [notes, setNotes] = useState([]);
+  const [countries, setCountries] = useState([]);
 
-  const [newNote, setNewNote] = useState(
-    'a new note...'
-  ); 
-  const [showAll, setShowAll] = useState(true);
+  const [name, setName] = useState('new name...'); 
 
   useEffect(() => {
-    noteService
+    getCountries
       .getAll()
-      .then(initialNotes => {
-        setNotes(initialNotes)
+      .then(countries => {
+        setCountries(countries)
       })
   }, [])
 
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    }
-    noteService
-    .create(noteObject)
-    .then(returnedNote => {
-      setNotes(notes.concat(returnedNote))
-      setNewNote('')
-    })
+
+  const handleChange = (event) => {
+    setName(event.target.value)
   }
-
-  const toggleImportanceOf = id => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-
-    noteService
-      .update(id, changedNote).then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(error => {
-
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-        setNotes(notes.filter(n => n.id !== id))
-      })
-  }
-
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
-
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important === true)
-
-    const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   return (
     <div>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
       <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all' }
-        </button>
+        <form>
+          find countries: <input 
+                            value={name} 
+                            onChange={handleChange} 
+                           />
+        </form>
       </div>
-      <ul>
-      {notesToShow.map(note =>
-          <Note key={note.id} note={note} 
-          toggleImportance={() => toggleImportanceOf(note.id)} />
+      <ol>
+      {countries.map(country =>
+          <li key={country.cca2}> {country.name.common} </li>
         )}
-      </ul>
-
-      <form onSubmit={addNote}>
-
-        <input 
-        value={newNote}
-        onChange={handleNoteChange} 
-        />
-        
-        <button type="submit">save</button>
-      </form>   
-
-      <Footer />
+      </ol>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import getCountries from './services/countries';
-import Component from './components/Component';
+import Comp1 from './components/Component';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -13,10 +13,11 @@ const App = () => {
       })
   }, [])
 
-  //Takes value from searchbar and sets showAll's state to false 
+  //Takes value from searchbar and sets showAll's state to false, and setI to -1
   const [newSearch, setNewSearch] = useState('')  
   const handleSearch = (event) => {
     setNewSearch(event.target.value.toLowerCase());
+    setI(-1);
     if (newSearch !== ''){return setShowAll(false)}
   }
   
@@ -26,8 +27,7 @@ const App = () => {
     ? countries
     : countries.filter((country) => country.name.common.toLowerCase().includes(newSearch));
 
-  const [view, setView] = useState(false)  
-  const viewComponent = view ? <Component countryToShow={countryToShow} /> : "";
+  const [i, setI] = useState(-1)  
 
     if (countryToShow.length > 10){
       return (<div>
@@ -52,10 +52,10 @@ const App = () => {
           </div>
           <ul>
           {countryToShow.map((country, i) =>
-              { return <li key={country.cca2}> {country.name.common}  <button onClick = {(i)=> setView(true)}> show </button> </li>}
+              { return <li key={country.cca2}> {country.name.common}  <button onClick = {()=> setI(i)}> show </button> </li>}
             )}
           </ul>
-          <div> {viewComponent} </div>
+          {i >= 0 ? <Comp1 countryToShow = {countryToShow} i = {i} /> : ""}
           
         </div>
       )

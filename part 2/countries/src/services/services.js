@@ -6,6 +6,11 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+const getWeath = (capital) => {
+  const request = axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=407bccd56fb60db3c94f81fadb9d2711&units=metric`)
+  return request.then(response => response.data)
+}
+
 const create = newObject => {
   const request = axios.post(baseUrl, newObject)
   return request.then(response => response.data)
@@ -16,4 +21,6 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update }
+const services = { getAll, create, update, getWeath };
+
+export default services;

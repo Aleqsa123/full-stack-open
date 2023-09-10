@@ -1,4 +1,6 @@
-const Comp1 = ({countryToShow, i}) => {
+import WeatherInfo from "./WeatherInfo";
+
+const Info = ({countryToShow, i, weather}) => {
     return (    
             <>
                 <h1> {countryToShow[i].name.common}</h1> 
@@ -10,9 +12,9 @@ const Comp1 = ({countryToShow, i}) => {
                     </ul>
                 </div>
                  <img src={countryToShow[i].flags.png} alt = {countryToShow[i].flags.alt} />
-
+                <WeatherInfo countryToShow = {countryToShow} i = {i} weather = {weather}/>
             </>
     ) 
 }
 
-export default Comp1
+export default Info;

@@ -7,7 +7,8 @@ const getAll = () => {
 }
 
 const getWeath = (capital) => {
-  const request = axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=407bccd56fb60db3c94f81fadb9d2711&units=metric`)
+  const API_KEY = process.env.REACT_APP_API_KEY;
+  const request = axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${API_KEY}&units=metric`)
   return request.then(response => response.data)
 }
 
